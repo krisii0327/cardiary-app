@@ -2,26 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+section {
+    @apply mx-4 mt-8;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.shadow-box {
+    @apply shadow-lg shadow-gray-500;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.button-black {
+    @apply px-3 py-1 border border-gray-500 text-white bg-primary rounded-lg w-32 flex items-center justify-center;
+}
+
+.button-white {
+    @apply px-3 py-1 border border-gray-500 bg-white text-black font-bold rounded-lg w-32 flex items-center justify-center;
+}
+
+.button-black-full {
+    @apply px-3 py-1 border border-gray-500 text-white bg-primary rounded-lg w-full flex items-center justify-center;
+}
+
+.button-white-full {
+    @apply px-3 py-1 border border-gray-500 bg-white text-black font-bold rounded-lg w-full flex items-center justify-center;
+}
+
+button {
+    @apply text-white rounded-lg px-4 py-2 shadow-box;
+}
+
+.text-size {
+    @apply text-primary font-semibold italic text-2xl;
+}
+
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"] {
+    @apply block w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 shadow-box;
+}
+
+input[type="search"] {
+    @apply border border-gray-400 rounded-lg px-4 py-2 shadow-box;
 }
