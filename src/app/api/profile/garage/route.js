@@ -24,13 +24,19 @@ export async function GET(req) {
     if(!hasID) {
         const {_id} = await User.findOne({email})
         const cars = await Cars.find({owner_id: _id})
-        
         return Response.json(cars)
     } else {
         const car = await Cars.find({_id: hasID})
-
         return Response.json(car)
     }
+}
+
+export async function PUT(req) {
+    mongoose.connect(process.env.MONGO_URL);
+    const { _id, nameOfTheCar, year, model, description, licensePlate, color } = await req.json();
+    const carDoc = await Cars.findByIdAndUpdate(_id, {nameOfTheCar, year, model, description, color, licensePlate})
+
+    return Response.json(true);
 }
 
 export async function DELETE(req) {

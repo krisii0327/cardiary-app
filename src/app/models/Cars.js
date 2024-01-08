@@ -5,6 +5,8 @@ const NotesSchema = new Schema({
     long_desc: String,
     price: Number,
     date: Date,
+    category: String,
+    kilometer: Number,
 }, {timestamps : true}
 );
 
@@ -20,6 +22,9 @@ const CarsSchema = new Schema({
     },
     year: {
         type: Number,
+    },
+    color: {
+        type: String,
     },
     licensePlate: {
         type: String,
