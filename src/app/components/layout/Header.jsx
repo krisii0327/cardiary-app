@@ -43,7 +43,7 @@ export default function Header() {
                 {userCredentials?.email && userCredentials?.image && (
                     <div className="flex items-center">
                         <div className="relative w-6 h-6">
-                            <Image src={userCredentials.image} alt='avatar' fill className="rounded-lg"/>
+                            <Image src={userCredentials.image} alt='avatar' fill className="rounded-lg" unoptimized={true}/>
                         </div>
                     </div>
                 )}
