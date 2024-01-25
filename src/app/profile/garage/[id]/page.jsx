@@ -18,6 +18,8 @@ import toast from "react-hot-toast";
 import Loading from "@/app/loading";
 import NoteMenuForm from "@/app/components/layout/Garage/NoteMenuForm";
 import moment from "moment";
+import Image from "next/image";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 
 export default function ViewCarPage() {
     const session = useSession();
@@ -27,6 +29,9 @@ export default function ViewCarPage() {
 
     const [car, setCar] = useState('');
     const [carLoaded, setCarLoaded] = useState(false);
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [listOfImages, setListOfImages] = useState('');
 
     const [showCreateNoteMenu, setShowCreateNoteMenu] = useState(false);
     const [showEditNoteMenu, setShowEditNoteMenu] = useState(false);
@@ -38,9 +43,14 @@ export default function ViewCarPage() {
                 const car = pickedCar.find(car => car._id === id);
                 setCar(car);
                 setCarLoaded(true);
+                setListOfImages(car?.images);
             });
         });
     }
+
+    useEffect(() => {
+        fetchData();
+    }, [])
 
     const notes = car?.notes?.sort(function(a, b) {
         return new Date(b.date) - new Date(a.date);
@@ -53,10 +63,6 @@ export default function ViewCarPage() {
         });
         return cost;
     }
-
-    useEffect(() => {
-        fetchData();
-    }, [])
 
     async function handleCreateNote(ev, data) {
         ev.preventDefault();
@@ -148,6 +154,18 @@ export default function ViewCarPage() {
         setShowEditNoteMenu(false);
     }
 
+    const prevSlide = () => {
+        const isFirstSlide = currentIndex === 0;
+        const newIndex = isFirstSlide ? listOfImages.length - 1 : currentIndex - 1;
+        setCurrentIndex(newIndex);
+    }
+    
+    const nextSlide = () => {
+        const isLastSlide = currentIndex === listOfImages.length - 1;
+        const newIndex = isLastSlide ? 0 : currentIndex + 1;
+        setCurrentIndex(newIndex);
+    }
+
     if(status === 'loading') {
         return <Loading />
     } else if (status === 'unauthenticated' && !carLoaded) {
@@ -190,14 +208,25 @@ export default function ViewCarPage() {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col md:flex-row mt-2 gap-2 bg-green-500 mx-auto">
-                <div className="md:w-1/2 flex justify-center items-center">
-                    <div className="bg-gray-200 rounded-lg w-96 h-64">
-                        <span className="flex h-full justify-center items-center">No Image</span>
+
+            {/* car infos */}
+            <div className="flex flex-col md:flex-row mt-6 gap-2 mx-auto">
+                <div className="md:w-1/2 flex flex-col justify-center items-center">
+                    <div className="bg-gray-200 rounded-lg sm:w-96 sm:h-64 w-72 h-52 relative">
+                        {car?.images?.length > 0 && ( 
+                            <Image src={listOfImages[currentIndex]} alt={"Photo of " + car?.nameOfTheCar} fill={true} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="rounded-lg" priority></Image>
+                        )}
+                        {car?.images?.length == 0 && (
+                            <span className="flex h-full justify-center items-center">No Image</span>
+                        )}
+                    </div>
+                    <div className="flex flex-row justify-around w-full mt-2">
+                        <div><ArrowLeft onClick={ev => prevSlide()} size={30} color="gray" className="hover:scale-110 bg-gray-100 rounded-lg w-10 border border-gray-300"/></div>
+                        <div><ArrowRight onClick={ev => nextSlide()} size={30} color="gray" className="hover:scale-110 bg-gray-100 rounded-lg w-10 border border-gray-300"/></div>
                     </div>
                 </div>
                 <div className="md:w-1/2 flex grow flex-col">
-                    <div className="h-full bg-red-500 flex flex-col p-2 gap-2">
+                    <div className="h-full flex flex-col p-2 gap-2">
                         <div className="flex items-center gap-1">
                             <IoInformationCircleOutline className="w-5 h-5"/>
                             <span>Info: {car.description}</span>
@@ -210,11 +239,14 @@ export default function ViewCarPage() {
                             <TbReportMoney className="w-5 h-5"/>
                             <span>All cost of services: {allCostForTheCar()}$</span>
                         </div>
-                        <span>Last registreted kilomter:</span>
+                        <span>Last registreted kilometer:</span>
                     </div>
                 </div>
             </div>
-            <div className="mt-4">
+
+            {/* note section */}
+            <div className="mt-6">
+                {/* note menu */}
                 <div className="flex items-center">
                     {showCreateNoteMenu && (
                         <NoteMenuForm handleNoteEvent={handleCreateNote} handleBack={handleBack}/>
@@ -228,6 +260,8 @@ export default function ViewCarPage() {
                     </span>
                     <div onClick={() => setShowCreateNoteMenu(true)} className="ml-4 border border-gray-400 px-1 py-0.5 font-semibold rounded-lg hover:bg-gray-200 cursor-pointer">Create a new note</div>
                 </div>
+
+                {/* note listing */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 mt-2 gap-4">
                         {notes && notes.map(note => (
                             <div key={note._id} className="flex w-full bg-gray-100 rounded-lg p-1 border border-gray-400 hover:scale-[1.02] transition duration-500">
@@ -254,6 +288,7 @@ export default function ViewCarPage() {
                             </div>
                         ))}
                 </div>
+
             </div>
         </section>
     )

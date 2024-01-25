@@ -12,7 +12,7 @@ export default function ProfilePage() {
     const [profileFetched, setProfileFetched] = useState(false);
 
     const [name, setName] = useState('');
-    //const [image, setImage] = useState(user?.image || '');
+    const [image, setImage] = useState('');
     const [phone, setPhone] = useState('');
     const [streetAddress, setStreetAddress] = useState('');
     const [postalCode, setPostalCode] = useState('');
@@ -24,6 +24,7 @@ export default function ProfilePage() {
           fetch('/api/profile').then(response => {
             response.json().then(data => {
               setName(data.name);
+              setImage(data.image)
               setPhone(data.phone);
               setStreetAddress(data.streetAddress);
               setPostalCode(data.postalCode);
@@ -31,6 +32,7 @@ export default function ProfilePage() {
               setCountry(data.country);
               //setIsAdmin(data.admin);
               setProfileFetched(true);
+              console.log(data.name)
             });
           });
         }
@@ -38,11 +40,25 @@ export default function ProfilePage() {
 
     async function handleProfileInfoUpdate(ev, data) {
         ev.preventDefault();
-        await fetch('/api/profile', {
-            method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data),
-        });
+        const updatePromise = new Promise(async (resolve, reject) => {
+            const response = await fetch('/api/profile', {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data),
+            });
+
+            if(response.ok) {
+                resolve();
+            } else {
+                reject();
+            }
+        })
+
+        await toast.promise(updatePromise, {
+            loading: 'Profile updating...',
+            success: 'Profile changes saved',
+            error: 'Oops, something went wrong',
+        })
     }
 
     if(status === 'loading') {
@@ -56,10 +72,10 @@ export default function ProfilePage() {
             <div>
                 <div className="sm:flex gap-6">
                     <div className="mb-2 sm:mb-0 flex flex-col items-center gap-2">
-                        <EditableImage image={session?.data?.userCredentials?.image}/>
+                        <EditableImage imageLink={image} setImageLink={setImage}/>
                         <button className="button-black whitespace-nowrap text-sm items-center sm:text-normal">Change Password</button>
                     </div>
-                    <form className="grow" onSubmit={ev => handleProfileInfoUpdate(ev, {name, email, city, postalCode, streetAddress, phone, country})}>
+                    <form className="grow" onSubmit={ev => handleProfileInfoUpdate(ev, {name, email, city, postalCode, streetAddress, phone, country, image})}>
                         <label className="leading-4">Name</label>
                         <input type="text" value={name || ''} onChange={ev => setName(ev.target.value)}/>
                         <label className="leading-4">Email</label>

@@ -32,8 +32,8 @@ const CarsSchema = new Schema({
     description: {
         type: String,
     },
-    image: {
-        type: String,
+    images: {
+        type: [],
     },
     notes: {
         type: [NotesSchema],
