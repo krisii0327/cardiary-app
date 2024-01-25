@@ -51,7 +51,7 @@ export default function EditableImage({imageLink, setImageLink}) {
             <div className="bg-gray-100 flex justify-center items-center h-32 w-32 border border-black rounded-lg object-cover">
                 {imageLink && (
                     <div className="relative w-full h-full">
-                        <Image referrerPolicy="no-referrer" src={imageLink} alt="avatar" fill className="rounded-lg"/>
+                        <Image referrerPolicy="no-referrer" src={imageLink} alt="avatar" fill className="rounded-lg" unoptimized/>
                     </div>
                 )}
                 {!imageLink && (
