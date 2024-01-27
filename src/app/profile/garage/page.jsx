@@ -1,6 +1,7 @@
 "use client"
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
+import { redirect } from "next/navigation";
 import SectionHeaders from "../../components/layout/SectionHeaders";
 import GarageCarItem from "@/app/components/layout/Garage/GarageCarItem";
 import toast from "react-hot-toast";
@@ -123,8 +124,6 @@ export default function GaragePage() {
         setShowCarMenu(false);
         setEditCarMenu(false);
     }
-
-    const value = 6;
 
     if(status === 'loading') {
         return <Loading />

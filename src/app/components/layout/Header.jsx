@@ -9,6 +9,7 @@ import { BiSolidCarGarage } from "react-icons/bi";
 import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import { LogIn, LogOut, UserCog, UserPlus, Warehouse } from "lucide-react";
 
 export default function Header() {
     const session = useSession();
@@ -57,22 +58,28 @@ export default function Header() {
                     <div className="flex flex-col gap-2 items-end border border-gray-500 p-2 px-4 rounded-lg shadow-box bg-white font-medium">
                         {status === 'unauthenticated' && (
                             <>
-                                <Link href={'/login'}>Login</Link>
-                                <Link href={'/register'}>Register</Link>
+                                <Link href={'/login'} className="flex items-center gap-2 hover:bg-gray-200 rounded-lg px-2">
+                                    <LogIn size={20} strokeWidth={1.5} />
+                                    Login
+                                </Link>
+                                <Link href={'/register'} className="flex items-center gap-2 hover:bg-gray-200 rounded-lg px-2">
+                                    <UserPlus size={20} strokeWidth={1.5} />
+                                    Register
+                                </Link>
                             </>
                         )}
                         {status === 'authenticated' && (
                             <>
                                 <Link href={'/profile'} className="flex items-center gap-2 hover:bg-gray-200 rounded-lg px-2">
-                                    <AiOutlineProfile />
+                                    <UserCog size={20} strokeWidth={1.5}/>
                                     <span>Profile</span>
                                 </Link>
                                 <Link href={'/profile/garage'} className="flex items-center gap-2 hover:bg-gray-200 rounded-lg px-2">
-                                    <BiSolidCarGarage />
+                                    <Warehouse size={20} strokeWidth={1.5}/>
                                     <span>Garage</span>
                                 </Link>
                                 <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-200 rounded-lg px-2" onClick={signOut}>
-                                    <CiLogout />
+                                    <LogOut size={20} strokeWidth={1.5}/>
                                     <span>Logout</span>
                                 </div>
                             </>
