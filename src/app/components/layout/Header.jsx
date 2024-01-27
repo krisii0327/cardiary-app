@@ -1,15 +1,10 @@
 "use client"
 import Link from "next/link";
-import { FiMenu } from "react-icons/fi";
 import { FaCar } from "react-icons/fa6";
-import { FaUser } from "react-icons/fa";
-import { CiLogout } from "react-icons/ci";
-import { AiOutlineProfile } from "react-icons/ai";
-import { BiSolidCarGarage } from "react-icons/bi";
 import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import { LogIn, LogOut, UserCog, UserPlus, Warehouse } from "lucide-react";
+import { LogIn, LogOut, UserCog, UserPlus, Warehouse, User, Menu } from "lucide-react";
 
 export default function Header() {
     const session = useSession();
@@ -49,9 +44,9 @@ export default function Header() {
                     </div>
                 )}
                 {!userCredentials?.image && (
-                    <FaUser className="w-4 h-4"/>
+                    <User fill="true" size={20}/>
                 )}
-                <FiMenu className="w-5 h-5"/>
+                <Menu size={20}/>
             </div>
             {menu && (
                 <div className="absolute mx-4 -right-2 top-12">
