@@ -19,11 +19,11 @@ section {
 }
 
 .button-black-full {
-    @apply px-3 py-1 border border-gray-500 text-white bg-primary rounded-lg w-full flex items-center justify-center;
+    @apply px-3 py-1 border border-gray-500 text-white bg-primary rounded-lg w-full flex items-center justify-center hover:scale-[1.02];
 }
 
 .button-white-full {
-    @apply px-3 py-1 border border-gray-500 bg-white text-black font-bold rounded-lg w-full flex items-center justify-center;
+    @apply px-3 py-1 border border-gray-500 bg-white text-black font-bold rounded-lg w-full flex items-center justify-center hover:scale-[1.02];
 }
 
 button {
@@ -34,7 +34,7 @@ button {
     @apply text-primary font-semibold italic text-2xl;
 }
 
-input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="number"], input[type="date"] {
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="number"], input[type="date"], textarea[type="text"] {
     @apply block w-full border border-gray-400 rounded-lg px-4 py-2 mb-3 shadow-box;
 }
 

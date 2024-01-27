@@ -25,7 +25,7 @@ export default function NoteMenuForm({noteData, handleNoteEvent, handleBack}) {
                         <label>Cost of service</label>
                         <input type="number" value={price} onChange={ev => (setPrice(ev.target.value))}/>
                         <label>Service long description</label>
-                        <input type="text" value={long_desc} onChange={ev => (setLong_Desc(ev.target.value))}/>
+                        <textarea type="text" value={long_desc} onChange={ev => (setLong_Desc(ev.target.value))}/>
                         <label>Date</label>
                         <input type="date" value={date} onChange={ev => (setDate(ev.target.value))}/>
                     </div>

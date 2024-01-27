@@ -124,6 +124,8 @@ export default function GaragePage() {
         setEditCarMenu(false);
     }
 
+    const value = 6;
+
     if(status === 'loading') {
         return <Loading />
     } else if (status === 'unauthenticated' && !carsFetched) {
@@ -149,7 +151,7 @@ export default function GaragePage() {
                     <div>
                         <div className="mt-6 grid grid-cols-1 xl:grid-cols-2 gap-3 lg:gap-5">
                             {ownCars.map(car => (
-                                <GarageCarItem key={car._id} carData={car} onDelete={() => handleDeleteCar(car._id)} onEdit={() => handleEditCarForm(car)} />
+                                <GarageCarItem key={car._id} carData={car} onDelete={() => handleDeleteCar(car._id)} onEdit={() => handleEditCarForm(car)}/>
                             ))}
                         </div>
                     </div>

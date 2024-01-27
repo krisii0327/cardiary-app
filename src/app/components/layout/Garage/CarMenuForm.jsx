@@ -2,6 +2,7 @@ import SectionHeaders from "@/app/components/layout/SectionHeaders";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 
 export default function CarMenuForm({carData, handleCarEvent, handleBack}) {
     const [nameOfTheCar, setNameOfTheCar] = useState(carData?.nameOfTheCar || '');
@@ -11,7 +12,9 @@ export default function CarMenuForm({carData, handleCarEvent, handleBack}) {
     const [licensePlate, setLicensePlate] = useState(carData?.licensePlate || '');
     const [description, setDescription] = useState(carData?.description || '');
     const [images, setImages] = useState(carData?.images || []);
-    const [currentImage, setCurrentImage] = useState(carData?.images[0] || '');
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [listOfImages, setListOfImages] = useState(carData?.images || []);
 
     const _id = carData?._id;
 
@@ -32,7 +35,7 @@ export default function CarMenuForm({carData, handleCarEvent, handleBack}) {
                 if(response.ok) {
                     resolve();
                     setImages(images => [link, ...images]);
-                    setCurrentImage(link);
+                    setCurrentIndex(0);
                 } else {
                     reject();
                 }
@@ -46,6 +49,18 @@ export default function CarMenuForm({carData, handleCarEvent, handleBack}) {
         };
     }
 
+    const prevSlide = () => {
+        const isFirstSlide = currentIndex === 0;
+        const newIndex = isFirstSlide ? listOfImages.length - 1 : currentIndex - 1;
+        setCurrentIndex(newIndex);
+    }
+    
+    const nextSlide = () => {
+        const isLastSlide = currentIndex === listOfImages.length - 1;
+        const newIndex = isLastSlide ? 0 : currentIndex + 1;
+        setCurrentIndex(newIndex);
+    }
+
     return (
         <div className="fixed bg-black/70 flex inset-0 items-center justify-center z-20">
             <div className="flex flex-col rounded-lg shadow-box gap-2 p-4 bg-white">
@@ -57,7 +72,7 @@ export default function CarMenuForm({carData, handleCarEvent, handleBack}) {
                             <div className="w-64 h-40 bg-gray-300 rounded-lg border border-gray-400">
                                 {images.length > 0 && 
                                     <div className="flex h-full justify-center items-center relative">
-                                        <Image src={currentImage} alt={currentImage} fill objectFit="fill"></Image>
+                                        <Image src={listOfImages[currentIndex]} alt={"Photo of " + carData?.nameOfTheCar} fill style={{objectFit:"cover"}} sizes="100%" priority></Image>
                                    </div>
                                 }
                                 {images.length == 0 && 
@@ -66,6 +81,13 @@ export default function CarMenuForm({carData, handleCarEvent, handleBack}) {
                                    </span>
                                 }
                             </div>
+                            {carData.images.length > 1 && (
+                                <div className="flex flex-row justify-around w-full">
+                                    <div><ArrowLeft onClick={ev => prevSlide()} size={30} color="gray" className="hover:scale-110 bg-gray-100 rounded-lg w-10 border border-gray-300"/></div>
+                                    <div>{currentIndex+1}/{carData.images.length}</div>
+                                    <div><ArrowRight onClick={ev => nextSlide()} size={30} color="gray" className="hover:scale-110 bg-gray-100 rounded-lg w-10 border border-gray-300"/></div>
+                                </div>
+                            )}
                             <label>
                                 <input type="file" className="hidden" onChange={handleFileChange}/>
                                 <span className="button-black-full cursor-pointer">Upload Image</span>

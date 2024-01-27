@@ -1,29 +1,19 @@
-import { GoTrash } from "react-icons/go";
-import { GrEdit } from "react-icons/gr";
-import { CiCalendarDate } from "react-icons/ci";
-import { IoInformationCircleOutline } from "react-icons/io5";
-import { MdOutlineSpeakerNotes } from "react-icons/md";
-import { IoLayersOutline } from "react-icons/io5";
-import { TbBrandTabler } from "react-icons/tb";
-import { IoColorFillOutline } from "react-icons/io5";
-import Link from "next/link";
-import DeleteButton from "../DeleteButton";
 import { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
+import SideButton from "@/app/components/layout/SideButton";
+import { Calendar, NotebookText, SprayCan, FormInput, Blend } from "lucide-react";
 
 export default function GarageCarItem({carData, onDelete, onEdit}) {
     const [showConfirm, setShowConfirm] = useState(false);
-
-    const handleConfirm = () => {
-        setShowConfirm(false);
-    }
     
     return (
-        <div key={carData._id} className="flex bg-gray-100 rounded-lg border border-gray-400 p-1 hover:scale-105 transition duration-500 gap-2 shadow-box">
+        <div key={carData._id} className="flex bg-gray-100 rounded-lg border border-gray-400 p-1 hover:scale-105 transition duration-500 gap-2 shadow-box h-24">
+            {/* car image */}
             <Link href={'/profile/garage/' + carData._id} className="w-44" hidden={showConfirm}>
                 {carData.images[0] && (
                     <div className="flex h-full justify-center items-center relative">
-                        <Image src={carData.images[0]} alt={"Photo of " + carData.nameOfTheCar} fill objectFit="fill" className="rounded-lg"></Image>
+                        <Image src={carData.images[0]} alt={"Photo of " + carData.nameOfTheCar} fill style={{objectFit:"cover"}} className="rounded-lg" sizes="100%" priority></Image>
                     </div>
                 )}
                 {carData.images.length == 0 && (
@@ -32,48 +22,45 @@ export default function GarageCarItem({carData, onDelete, onEdit}) {
                     </div>
                 )}
             </Link>
+            {/* car infos */}
             <Link href={'/profile/garage/' + carData._id} className="w-full overflow-hidden h-20" hidden={showConfirm}>
                 <div className="flex flex-col justify-between h-full">
-                    <div className="flex">
-                        <div className="w-1/2 flex font-semibold text-primary italic font-xl items-center">
+                    <div className="grid grid-cols-[60%_40%]">
+                        <div className="flex font-semibold text-primary italic font-xl items-center">
                             {carData.nameOfTheCar}
                         </div>
-                        <div className="w-1/2 flex gap-1 items-center">
-                                <MdOutlineSpeakerNotes />
+                        <div className="flex gap-1 items-center">
+                                <NotebookText size={20} strokeWidth={1.3}/>
                                 {carData.notes.length}
                         </div>
                     </div>
-                    <div className="flex">
-                        <div className="w-1/2 flex gap-1 items-center">
-                                <TbBrandTabler className="w-5 h-5"/>
-                                {carData.licensePlate}
+                    <div className="grid grid-cols-[60%_40%]">
+                        <div className="flex gap-1 items-center">
+                                <FormInput size={20} strokeWidth={1.3}/>
+                                <span className="truncate">
+                                    {carData.licensePlate}
+                                </span>
                         </div>
-                        <div className="w-1/2 flex gap-1 items-center">
-                                <IoColorFillOutline />
+                        <div className="flex gap-1 items-center">
+                                <SprayCan size={20} strokeWidth={1.3} className="transform -scale-x-100"/>
                                 {carData.color}
                         </div>
                     </div>
-                    <div className="flex">
-                        <div className="w-1/2 flex gap-1 items-center">
-                            <CiCalendarDate className="w-5 h-5"/>
+                    <div className="grid grid-cols-[60%_40%]">
+                        <div className="flex gap-1 items-center">
+                            <Calendar size={20} strokeWidth={1.3}/>
                             {carData.year}
                         </div>
-                        <div className="w-1/2 flex gap-1 items-center">
-                            <IoLayersOutline />
+                        <div className="flex gap-1 items-center">
+                            <Blend size={20} strokeWidth={1.3}/>
                             {carData.model}
                         </div>
                     </div>
                 </div>
             </Link>
 
-            {/* side buttons */}
-            <div hidden={showConfirm}>
-                <div className="flex flex-col h-full justify-around">
-                    <div onClick={onEdit} className="bg-green-300 text-black border border-gray-500 p-2 rounded-lg cursor-pointer"><GrEdit /></div>
-                    <div onClick={() => setShowConfirm(true)} className="flex bg-red-400 text-black border border-gray-500 p-2 rounded-lg cursor-pointer"><GoTrash /></div>
-                </div>
-            </div>
-            <DeleteButton className="w-full" onDelete={onDelete} handleConfirm={handleConfirm} confirmState={showConfirm}/>
+           {/* side buttons */}
+           <SideButton onDelete={onDelete} onEdit={onEdit} showConfirm={showConfirm} setShowConfirm={setShowConfirm} className={"flex-col"}/>
         </div>
     )
 }

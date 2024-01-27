@@ -3,23 +3,12 @@ import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { GoSearch } from "react-icons/go";
-import { MdOutlineMessage } from "react-icons/md";
-import { GoTrash } from "react-icons/go";
-import { GrEdit } from "react-icons/gr";
-import { CiCalendarDate } from "react-icons/ci";
-import { IoInformationCircleOutline } from "react-icons/io5";
-import { MdOutlineSpeakerNotes } from "react-icons/md";
-import { IoLayersOutline } from "react-icons/io5";
-import { TbBrandTabler } from "react-icons/tb";
-import { IoColorFillOutline } from "react-icons/io5";
-import { TbReportMoney } from "react-icons/tb";
 import toast from "react-hot-toast";
 import Loading from "@/app/loading";
-import NoteMenuForm from "@/app/components/layout/Garage/NoteMenuForm";
-import moment from "moment";
 import Image from "next/image";
-import { ArrowRight, ArrowLeft } from "lucide-react";
+import NoteMenuForm from "@/app/components/layout/Garage/NoteMenuForm";
+import GarageNoteItem from "@/app/components/layout/Garage/GarageNoteItem";
+import { ArrowRight, ArrowLeft, NotebookText, Calendar, Search, SprayCan, Blend, FormInput, Coins, Info, Gauge } from "lucide-react";
 
 export default function ViewCarPage() {
     const session = useSession();
@@ -120,8 +109,7 @@ export default function ViewCarPage() {
         })
     }
 
-    async function handleDeleteNote(ev, note_id) {
-        ev.preventDefault();
+    async function handleDeleteNote(note_id) {
         const deletePromise = new Promise(async (resolve, reject) => {
             const response = await fetch('/api/profile/garage/note?_id=' + note_id, {
                 method: 'DELETE',
@@ -174,10 +162,11 @@ export default function ViewCarPage() {
 
     return (
         <section>
+            {/* top side, mini infos */}
             <div className="flex justify-between">
                 <div className="flex items-center gap-2 text-xl">
                     <span className="flex gap-1 items-center">
-                        <GoSearch className="w-6 h-6"/>
+                        <Search />
                         Selected car:
                     </span>
                     <span className="font-semibold">
@@ -188,29 +177,28 @@ export default function ViewCarPage() {
                         Back
                 </Link>
             </div>
-            <div>
-                <div className="flex justify-between gap-2 md:w-1/2 xl:w-1/3 mt-1 border-y border-gray-400 p-0.5">
-                    <div className="flex gap-1 items-center">
-                        <TbBrandTabler />
-                        {car.licensePlate}
-                    </div>
-                    <div className="flex gap-1 items-center">
-                        <CiCalendarDate className="w-5 h-5"/>
-                        {car.year}
-                    </div>
-                    <div className="flex gap-1 items-center">
-                        <IoLayersOutline />
-                        {car.model}
-                    </div>
-                    <div className="flex gap-1 items-center">
-                        <IoColorFillOutline />
-                        {car.color}
-                    </div>
+            <div className="flex justify-between gap-2 md:w-1/2 xl:w-1/3 mt-1 border-y border-gray-400 p-1">
+                <div className="flex gap-1 items-center">
+                    <FormInput strokeWidth={1.3}/>
+                    {car.licensePlate}
+                </div>
+                <div className="flex gap-1 items-center">
+                    <Calendar strokeWidth={1.3}/>
+                    {car.year}
+                </div>
+                <div className="flex gap-1 items-center">
+                    <Blend strokeWidth={1.3}/>
+                    {car.model}
+                </div>
+                <div className="flex gap-1 items-center">
+                    <SprayCan strokeWidth={1.3} className="transform -scale-x-100"/>
+                    {car.color}
                 </div>
             </div>
 
             {/* car infos */}
             <div className="flex flex-col md:flex-row mt-6 gap-2 mx-auto">
+                {/* left side, image and slider */}
                 <div className="md:w-1/2 flex flex-col justify-center items-center">
                     <div className="bg-gray-200 rounded-lg sm:w-96 sm:h-64 w-72 h-52 relative">
                         {car?.images?.length > 0 && ( 
@@ -222,30 +210,36 @@ export default function ViewCarPage() {
                     </div>
                     <div className="flex flex-row justify-around w-full mt-2">
                         <div><ArrowLeft onClick={ev => prevSlide()} size={30} color="gray" className="hover:scale-110 bg-gray-100 rounded-lg w-10 border border-gray-300"/></div>
+                        <div>{currentIndex+1}/{car?.images?.length}</div>
                         <div><ArrowRight onClick={ev => nextSlide()} size={30} color="gray" className="hover:scale-110 bg-gray-100 rounded-lg w-10 border border-gray-300"/></div>
                     </div>
                 </div>
+
+                {/* right side, infos */}
                 <div className="md:w-1/2 flex grow flex-col">
                     <div className="h-full flex flex-col p-2 gap-2">
                         <div className="flex items-center gap-1">
-                            <IoInformationCircleOutline className="w-5 h-5"/>
+                            <Info strokeWidth={1.3}/>
                             <span>Info: {car.description}</span>
                         </div>
                         <div className="flex items-center gap-1">
-                            <MdOutlineSpeakerNotes className="ml-0.5"/>
+                            <NotebookText strokeWidth={1.3}/>
                             <span>Notes: {car?.notes?.length}</span>
                         </div>
                         <div className="flex items-center gap-1">
-                            <TbReportMoney className="w-5 h-5"/>
+                            <Coins strokeWidth={1.3}/>
                             <span>All cost of services: {allCostForTheCar()}$</span>
                         </div>
-                        <span>Last registreted kilometer:</span>
+                        <div className="flex items-center gap-1">
+                            <Gauge strokeWidth={1.3}/>
+                            <span>Last registreted kilometer:</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
             {/* note section */}
-            <div className="mt-6">
+            <div className="mt-2 md:mt-6">
                 {/* note menu */}
                 <div className="flex items-center">
                     {showCreateNoteMenu && (
@@ -255,7 +249,7 @@ export default function ViewCarPage() {
                         <NoteMenuForm noteData={editableNote} handleNoteEvent={handleEditNote} handleBack={handleBack}/>
                     )}
                     <span className="flex gap-1 items-center">
-                        <MdOutlineMessage />
+                        <NotebookText strokeWidth={1.3} />
                         Notes: {car.notes?.length}
                     </span>
                     <div onClick={() => setShowCreateNoteMenu(true)} className="ml-4 border border-gray-400 px-1 py-0.5 font-semibold rounded-lg hover:bg-gray-200 cursor-pointer">Create a new note</div>
@@ -264,31 +258,9 @@ export default function ViewCarPage() {
                 {/* note listing */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 mt-2 gap-4">
                         {notes && notes.map(note => (
-                            <div key={note._id} className="flex w-full bg-gray-100 rounded-lg p-1 border border-gray-400 hover:scale-[1.02] transition duration-500">
-                                <div className="flex w-full">
-                                    <div className="flex grow mx-2 bg-red-300">
-                                        <div className="grid grid-cols-3 w-full items-center justify-between">
-                                            <div>{note.short_desc}</div>
-                                            <div className="text-center">{note.category}</div>
-                                            <div className="flex gap-1 items-center justify-end">
-                                                <CiCalendarDate className="w-6 h-6"/>
-                                                {moment(note.date).format("YYYY-MM-DD")}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex justify-end items-center gap-2">
-                                        <div onClick={ev => handleEditNoteForm(note)} className="flex p-2 border border-gray-500 rounded-lg bg-green-400 cursor-pointer">
-                                            <GrEdit />
-                                        </div>
-                                        <div onClick={ev => handleDeleteNote(ev, note._id)} className="flex p-2 border border-gray-500 rounded-lg bg-red-400 cursor-pointer">
-                                            <GoTrash />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <GarageNoteItem key={note._id} noteData={note} onDelete={() => handleDeleteNote(note._id)} onEdit={() => handleEditNoteForm(note)}/>
                         ))}
                 </div>
-
             </div>
         </section>
     )
