@@ -5,6 +5,7 @@ import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { LogIn, LogOut, UserCog, UserPlus, Warehouse, User, Menu } from "lucide-react";
+import { redirect } from "next/navigation";
 
 export default function Header() {
     const session = useSession();
@@ -13,6 +14,11 @@ export default function Header() {
     const userCredentials = session.data?.userCredentials;
 
     const [menu, setMenu] = useState(false);
+
+    const logOut = () => {
+        signOut()
+        return redirect('/login')
+    }
 
 
     return (
@@ -73,7 +79,7 @@ export default function Header() {
                                     <Warehouse size={20} strokeWidth={1.5}/>
                                     <span>Garage</span>
                                 </Link>
-                                <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-200 rounded-lg px-2" onClick={signOut}>
+                                <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-200 rounded-lg px-2" onClick={logOut}>
                                     <LogOut size={20} strokeWidth={1.5}/>
                                     <span>Logout</span>
                                 </div>

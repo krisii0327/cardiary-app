@@ -9,6 +9,7 @@ import Image from "next/image";
 import NoteMenuForm from "@/app/components/layout/Garage/NoteMenuForm";
 import GarageNoteItem from "@/app/components/layout/Garage/GarageNoteItem";
 import { ArrowRight, ArrowLeft, NotebookText, Calendar, Search, SprayCan, Blend, FormInput, Coins, Info, Gauge } from "lucide-react";
+import { redirect } from "next/navigation";
 
 export default function ViewCarPage() {
     const session = useSession();
