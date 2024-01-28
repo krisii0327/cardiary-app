@@ -25,7 +25,7 @@ export default function HomeGarage() {
 
     const handleChange = (searchInputText) => {
         setSearchInputText(searchInputText);
-        fetch('/api/garage').then(res => {
+        fetch('/api/homegarage').then(res => {
             res.json().then(cars => {
                 const data = cars.filter(car => car.nameOfTheCar.toLowerCase().includes(searchInputText.toLowerCase()));
                 setCars(data);
@@ -36,18 +36,27 @@ export default function HomeGarage() {
     return (
         <section>
             <div className="flex flex-col justify-center mx-4">
-                {/* <SearchBar searchHandler={handleChange} searchText={searchInputText} showCarMenuForm={() => setShowCarMenu(true)}/> */}
                 {!carsFetched && (
                     <Loading />
                 )}
+                {carsFetched && (
+                    <SearchBar searchHandler={handleChange} searchText={searchInputText} showMore={false}/>
+                )}
+                {cars.length == 0 && carsFetched && (
+                    <div className="text-slate-500 text-xl font-semibold mt-6">
+                        We found nothing in our system! Please try it again later!
+                    </div>
+                )}
                 {cars.length > 0 && carsFetched &&  (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
+                    <>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 mt-6">
                         {cars.map(car => (
                             <Link href={"/garage/" + car._id} key={car._id}>
                                 <CarItem carData={car}/>
                             </Link>
                         ))}
                     </div>
+                    </>
                 )}
             </div>
         </section>
