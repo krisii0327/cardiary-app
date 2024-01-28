@@ -32,7 +32,6 @@ export default function ProfilePage() {
               setCountry(data.country);
               //setIsAdmin(data.admin);
               setProfileFetched(true);
-              console.log(data.name)
             });
           });
         }

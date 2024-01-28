@@ -10,10 +10,9 @@ import NoteMenuForm from "@/app/components/layout/Garage/NoteMenuForm";
 import GarageNoteItem from "@/app/components/layout/Garage/GarageNoteItem";
 import { ArrowRight, ArrowLeft, NotebookText, Calendar, Search, SprayCan, Blend, FormInput, Coins, Info, Gauge } from "lucide-react";
 
-export default function ViewCarPage() {
+export default function ViewHomeCarPage() {
     const session = useSession();
     const {status} = session;
-    const email = session?.data?.userCredentials?.email;
     const { id } = useParams();
 
     const [car, setCar] = useState('');
@@ -22,14 +21,9 @@ export default function ViewCarPage() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [listOfImages, setListOfImages] = useState('');
 
-    const [showCreateNoteMenu, setShowCreateNoteMenu] = useState(false);
-    const [showEditNoteMenu, setShowEditNoteMenu] = useState(false);
-    const [editableNote, setEditableNote] = useState('');
-    
     const fetchData = () => {
-        fetch('/api/profile/garage?_id=' + id).then(res => {
-            res.json().then(pickedCar => {
-                const car = pickedCar.find(car => car._id === id);
+        fetch('/api/homegarage/?_id=' + id).then(res => {
+            res.json().then(car => {
                 setCar(car);
                 setCarLoaded(true);
                 setListOfImages(car?.images);
@@ -52,90 +46,6 @@ export default function ViewCarPage() {
         });
         return cost;
     }
-
-    async function handleCreateNote(ev, data) {
-        ev.preventDefault();
-        data = {email, id, ...data}
-        const createPromise = new Promise(async (resolve, reject) => {
-            const response = await fetch('/api/profile/garage/note', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data),
-            });
-
-            if(response.ok) {
-                resolve();
-                fetchData();
-            } else {
-                reject();
-            }
-
-            setShowCreateNoteMenu(false);
-        })
-
-        await toast.promise(createPromise, {
-            loading: 'Creating a note...',
-            success: 'Note created.',
-            error: 'Oops, something went wrong.',
-        })
-    }
-
-    async function handleEditNote(ev, data) {
-        ev.preventDefault();
-        const note_id = editableNote._id;
-        data = {car_id: id, note_id, ...data}
-        const editPromise = new Promise(async (resolve, reject) => {
-            const response =  await fetch('/api/profile/garage/note', {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data),
-            });
-
-            if(response.ok) {
-                resolve();
-                fetchData();
-            } else {
-                reject();
-            }
-            
-            setEditableNote('');
-            setShowEditNoteMenu(false);
-        })
-
-        await toast.promise(editPromise, {
-            loading: 'Edit note...',
-            success: 'Note edited.',
-            error: 'Oops, something went wrong.',
-        })
-    }
-
-    async function handleDeleteNote(note_id) {
-        const deletePromise = new Promise(async (resolve, reject) => {
-            const response = await fetch('/api/profile/garage/note?_id=' + note_id, {
-                method: 'DELETE',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(id),
-            });
-
-            if(response.ok) {
-                resolve();
-                fetchData();
-            } else {
-                reject();
-            }
-        })
-
-        await toast.promise(deletePromise, {
-            loading: 'Deleting note...',
-            success: 'Note deleted',
-            error: 'Oops, something went wrong',
-        })
-    }
-
-    const handleEditNoteForm = (note) => {
-        setShowEditNoteMenu(true);
-        setEditableNote(note);
-    } 
 
     const handleBack = () => {
         setShowCreateNoteMenu(false);
@@ -173,7 +83,7 @@ export default function ViewCarPage() {
                         {car.nameOfTheCar}
                     </span>
                 </div>
-                <Link href='/profile/garage/' className="border border-gray-500 font-semibold rounded-lg px-2 py-1 hover:bg-gray-200">
+                <Link href='/' className="border border-gray-500 font-semibold rounded-lg px-2 py-1 hover:bg-gray-200">
                         Back
                 </Link>
             </div>
@@ -242,23 +152,16 @@ export default function ViewCarPage() {
             <div className="mt-2 md:mt-6">
                 {/* note menu */}
                 <div className="flex items-center">
-                    {showCreateNoteMenu && (
-                        <NoteMenuForm handleNoteEvent={handleCreateNote} handleBack={handleBack}/>
-                    )}
-                    {showEditNoteMenu && (
-                        <NoteMenuForm noteData={editableNote} handleNoteEvent={handleEditNote} handleBack={handleBack}/>
-                    )}
                     <span className="flex gap-1 items-center">
                         <NotebookText strokeWidth={1.3} />
                         Notes: {car.notes?.length}
                     </span>
-                    <div onClick={() => setShowCreateNoteMenu(true)} className="ml-4 border border-gray-400 px-1 py-0.5 font-semibold rounded-lg hover:bg-gray-200 cursor-pointer">Create a new note</div>
                 </div>
 
                 {/* note listing */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 mt-2 gap-4">
                         {notes && notes.map(note => (
-                            <GarageNoteItem key={note._id} noteData={note} onDelete={() => handleDeleteNote(note._id)} onEdit={() => handleEditNoteForm(note)} sideButtonHidden={true}/>
+                            <GarageNoteItem key={note._id} noteData={note} sideButtonHidden={false}/>
                         ))}
                 </div>
             </div>

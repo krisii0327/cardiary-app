@@ -3,7 +3,7 @@ import { useState } from "react";
 import moment from "moment";
 import SideButton from "@/app/components/layout/SideButton";
 
-export default function GarageNoteItem({noteData, onDelete, onEdit}) {
+export default function GarageNoteItem({noteData, onDelete, onEdit, sideButtonHidden = false}) {
     const [showConfirm, setShowConfirm] = useState(false);
 
     return (
@@ -50,7 +50,9 @@ export default function GarageNoteItem({noteData, onDelete, onEdit}) {
                 </div>
                 
                 {/* side buttons */}
-                <SideButton onDelete={onDelete} onEdit={onEdit} showConfirm={showConfirm} setShowConfirm={setShowConfirm} className={"flex-row group-hover:flex-col"}/>
+                {sideButtonHidden == true && (
+                    <SideButton onDelete={onDelete} onEdit={onEdit} showConfirm={showConfirm} setShowConfirm={setShowConfirm} className={"flex-row group-hover:flex-col"}/>
+                )}
             </div>
 
             {/* desktop version */}
@@ -93,7 +95,9 @@ export default function GarageNoteItem({noteData, onDelete, onEdit}) {
                 </div>
 
                 {/* side buttons */}
-                <SideButton onDelete={onDelete} onEdit={onEdit} showConfirm={showConfirm} setShowConfirm={setShowConfirm} className={"flex-row group-hover:flex-col"}/>
+                {sideButtonHidden == true && (
+                    <SideButton onDelete={onDelete} onEdit={onEdit} showConfirm={showConfirm} setShowConfirm={setShowConfirm} className={"flex-row group-hover:flex-col"}/>
+                )}
             </div>
         </div>
     )

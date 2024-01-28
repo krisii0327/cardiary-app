@@ -81,7 +81,7 @@ export default function CarMenuForm({carData, handleCarEvent, handleBack}) {
                                    </span>
                                 }
                             </div>
-                            {carData.images.length > 1 && (
+                            {carData?.images?.length > 1 && (
                                 <div className="flex flex-row justify-around w-full">
                                     <div><ArrowLeft onClick={ev => prevSlide()} size={30} color="gray" className="hover:scale-110 bg-gray-100 rounded-lg w-10 border border-gray-300"/></div>
                                     <div>{currentIndex+1}/{carData.images.length}</div>
