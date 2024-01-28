@@ -118,11 +118,13 @@ export default function ViewHomeCarPage() {
                             <span className="flex h-full justify-center items-center">No Image</span>
                         )}
                     </div>
-                    <div className="flex flex-row justify-around w-full mt-2">
-                        <div><ArrowLeft onClick={ev => prevSlide()} size={30} color="gray" className="hover:scale-110 bg-gray-100 rounded-lg w-10 border border-gray-300"/></div>
-                        <div>{currentIndex+1}/{car?.images?.length}</div>
-                        <div><ArrowRight onClick={ev => nextSlide()} size={30} color="gray" className="hover:scale-110 bg-gray-100 rounded-lg w-10 border border-gray-300"/></div>
-                    </div>
+                    {car?.images?.length > 0 && (
+                        <div className="flex flex-row justify-around w-full mt-2">
+                            <div><ArrowLeft onClick={ev => prevSlide()} size={30} color="gray" className="hover:scale-110 bg-gray-100 rounded-lg w-10 border border-gray-300"/></div>
+                            <div>{currentIndex+1}/{car?.images?.length}</div>
+                            <div><ArrowRight onClick={ev => nextSlide()} size={30} color="gray" className="hover:scale-110 bg-gray-100 rounded-lg w-10 border border-gray-300"/></div>
+                        </div>
+                    )}
                 </div>
 
                 {/* right side, infos */}
