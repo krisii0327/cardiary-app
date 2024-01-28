@@ -1,18 +1,12 @@
 "use client"
-import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import toast from "react-hot-toast";
-import Loading from "@/app/loading";
 import Image from "next/image";
-import NoteMenuForm from "@/app/components/layout/Garage/NoteMenuForm";
 import GarageNoteItem from "@/app/components/layout/Garage/GarageNoteItem";
 import { ArrowRight, ArrowLeft, NotebookText, Calendar, Search, SprayCan, Blend, FormInput, Coins, Info, Gauge } from "lucide-react";
 
 export default function ViewHomeCarPage() {
-    const session = useSession();
-    const {status} = session;
     const { id } = useParams();
 
     const [car, setCar] = useState('');
@@ -47,11 +41,6 @@ export default function ViewHomeCarPage() {
         return cost;
     }
 
-    const handleBack = () => {
-        setShowCreateNoteMenu(false);
-        setShowEditNoteMenu(false);
-    }
-
     const prevSlide = () => {
         const isFirstSlide = currentIndex === 0;
         const newIndex = isFirstSlide ? listOfImages.length - 1 : currentIndex - 1;
@@ -62,12 +51,6 @@ export default function ViewHomeCarPage() {
         const isLastSlide = currentIndex === listOfImages.length - 1;
         const newIndex = isLastSlide ? 0 : currentIndex + 1;
         setCurrentIndex(newIndex);
-    }
-
-    if(status === 'loading') {
-        return <Loading />
-    } else if (status === 'unauthenticated' && !carLoaded) {
-        return redirect('/login');
     }
 
     return (
