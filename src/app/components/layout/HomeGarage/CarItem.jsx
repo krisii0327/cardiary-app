@@ -5,9 +5,9 @@ export default function CarItem({carData}) {
     return (
         <div className="flex flex-col hover:scale-90 transition duration-500 cursor-pointer">
             <div className="flex h-32 w-full">
-                {carData.images.length > 1 && (
+                {carData.images.length >= 1 && (
                     <div className="flex h-full w-full relative">
-                        <Image src={carData.images[0]} alt={"Photo of " + carData.nameOfTheCar} fill style={{objectFit:"cover"}} className="rounded-lg shadow-box" sizes="100%" priority></Image>
+                        <Image src={carData?.images?.[0]} alt={"Photo of " + carData.nameOfTheCar} fill style={{objectFit:"fill"}} className="rounded-lg shadow-box" sizes="100%" priority></Image>
                     </div>
                 )}
                 {carData.images.length == 0 && (

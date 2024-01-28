@@ -3,6 +3,7 @@ import CarItem from "./HomeGarage/CarItem";
 import SearchBar from "./Garage/SearchBar";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Loading from "@/app/loading";
 
 export default function HomeGarage() {
     const [searchInputText, setSearchInputText] = useState('');
@@ -36,15 +37,18 @@ export default function HomeGarage() {
         <section>
             <div className="flex flex-col justify-center mx-4">
                 {/* <SearchBar searchHandler={handleChange} searchText={searchInputText} showCarMenuForm={() => setShowCarMenu(true)}/> */}
-                    {cars.length > 0 && (
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-                            {cars.map(car => (
-                                <Link href={"/garage/" + car._id} key={car._id}>
-                                    <CarItem carData={car}/>
-                                </Link>
-                            ))}
-                        </div>
-                    )}
+                {!carsFetched && (
+                    <Loading />
+                )}
+                {cars.length > 0 && carsFetched &&  (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
+                        {cars.map(car => (
+                            <Link href={"/garage/" + car._id} key={car._id}>
+                                <CarItem carData={car}/>
+                            </Link>
+                        ))}
+                    </div>
+                )}
             </div>
         </section>
     )

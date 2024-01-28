@@ -209,7 +209,7 @@ export default function ViewCarPage() {
                             <span className="flex h-full justify-center items-center">No Image</span>
                         )}
                     </div>
-                    {car?.images?.length > 0 && (
+                    {car?.images?.length > 1 && (
                         <div className="flex flex-row justify-around w-full mt-2">
                             <div><ArrowLeft onClick={ev => prevSlide()} size={30} color="gray" className="hover:scale-110 bg-gray-100 rounded-lg w-10 border border-gray-300"/></div>
                             <div>{currentIndex+1}/{car?.images?.length}</div>
