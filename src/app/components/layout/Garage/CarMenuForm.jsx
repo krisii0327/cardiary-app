@@ -62,8 +62,8 @@ export default function CarMenuForm({carData, handleCarEvent, handleBack}) {
     }
 
     return (
-        <div className="fixed bg-black/70 flex inset-0 items-center justify-center z-20">
-            <div className="flex flex-col rounded-lg shadow-box gap-2 p-4 bg-white max-h-screen overflow-y-auto">
+        <div className="fixed bg-black/70 flex p-10 md:p-0 inset-0 items-center justify-center z-20">
+            <div className="flex flex-col rounded-lg shadow-box gap-2 p-4 bg-white max-h-full overflow-auto">
                 <form onSubmit={ev => handleCarEvent(ev, {_id, nameOfTheCar, color, licensePlate, year, model, description, images})}>
                     <SectionHeaders subHeader={"Creating a new car"}/>
                     <div className="flex flex-col md:flex-row mt-8 gap-4 justify-center items-center mb-4">
